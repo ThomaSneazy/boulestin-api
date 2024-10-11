@@ -1,9 +1,4 @@
 import './styles/style.css'
-import dotenv from 'dotenv'
-dotenv.config()
-
-console.log('Hello')
-
 
 //////////////////////CONTACT FORM//////////////////////
 document.addEventListener('DOMContentLoaded', function() {
@@ -27,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: process.env.CONTACT_LOGIN,
-            pass: process.env.CONTACT_PASSWORD,
+            login: import.meta.env.VITE_CONTACT_LOGIN,
+            pass: import.meta.env.VITE_CONTACT_PASSWORD,
             lg: 'FR',
             civilite: getValueById('contact_civilite'),
             nom: getValueById('contact_nom'),
@@ -86,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: process.env.CONTACT_LOGIN,
-            pass: process.env.CONTACT_PASSWORD,
+            login: import.meta.env.VITE_CONTACT_LOGIN,
+            pass: import.meta.env.VITE_CONTACT_PASSWORD,
             lg: 'FR',
             civilite: getValueById('collab_civilite'),
             nom: getValueById('collab_nom'),
@@ -143,8 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: process.env.CONTACT_LOGIN,
-            pass: process.env.CONTACT_PASSWORD,
+            login: import.meta.env.VITE_CONTACT_LOGIN,
+            pass: import.meta.env.VITE_CONTACT_PASSWORD,
             lg: 'FR',
             civilite: getValueById('sav_civilite'),
             nom: getValueById('sav_nom'),
@@ -205,8 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: process.env.CONTACT_LOGIN,
-            pass: process.env.CONTACT_PASSWORD,
+            login: import.meta.env.VITE_CONTACT_LOGIN,
+            pass: import.meta.env.VITE_CONTACT_PASSWORD,
             lg: 'FR',
             civilite: getValueById('civilite'),
             nom: getValueById('nom'),
