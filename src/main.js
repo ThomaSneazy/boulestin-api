@@ -259,5 +259,10 @@ function _(key) {
     if (typeof import.meta.env !== 'undefined') {
         return import.meta.env[key] || '';
     }
-    return process.env[key] || '';
+    if (typeof process !== 'undefined' && process.env) {
+        return process.env[key] || '';
+    }
+    // Si aucune variable d'environnement n'est trouvée, retournez une chaîne vide
+    console.error(`La variable d'environnement ${key} n'est pas définie`);
+    return '';
 }
