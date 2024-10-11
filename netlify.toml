@@ -1,0 +1,4 @@
+[[headers]]
+    for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "https://ochateau-fbe23518a731469800a2ffe48e03f3.webflow.io"
