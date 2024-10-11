@@ -254,3 +254,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function _(key) {
+    if (typeof import.meta.env !== 'undefined') {
+        return import.meta.env[key] || '';
+    }
+    return process.env[key] || '';
+}
