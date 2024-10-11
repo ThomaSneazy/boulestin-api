@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -22,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
+            login: contactLogin,
+            pass: contactPassword,
             lg: 'FR',
             civilite: getValueById('contact_civilite'),
             nom: getValueById('contact_nom'),
@@ -56,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function getEnvVariable(key) {
+    return import.meta.env[key] || process.env[key] || '';
+}
+
 //////////////////////COLLAB FORM//////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('collabForm');
@@ -71,6 +79,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -81,8 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
+            login: contactLogin,
+            pass: contactPassword,
             lg: 'FR',
             civilite: getValueById('collab_civilite'),
             nom: getValueById('collab_nom'),
@@ -131,6 +143,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -138,8 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
+            login: contactLogin,
+            pass: contactPassword,
             lg: 'FR',
             civilite: getValueById('sav_civilite'),
             nom: getValueById('sav_nom'),
@@ -187,6 +203,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -200,8 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const data = {
             action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
+            login: contactLogin,
+            pass: contactPassword,
             lg: 'FR',
             civilite: getValueById('civilite'),
             nom: getValueById('nom'),

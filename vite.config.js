@@ -34,7 +34,6 @@ export default defineConfig({
     },
   },
   define: {
-    'import.meta.env.VITE_CONTACT_LOGIN': JSON.stringify(process.env.VITE_CONTACT_LOGIN),
-    'import.meta.env.VITE_CONTACT_PASSWORD': JSON.stringify(process.env.VITE_CONTACT_PASSWORD),
-  },
+    'process.env': process.env
+  }
 })
