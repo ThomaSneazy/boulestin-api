@@ -235,126 +235,126 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-//////////////////////COLLAB FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('collabForm');
-    const submitButton = document.getElementById('collabSubmit');
+// //////////////////////COLLAB FORM//////////////////////
+// document.addEventListener('DOMContentLoaded', function() {
+//     const form = document.getElementById('collabForm');
+//     const submitButton = document.getElementById('collabSubmit');
 
-    if (!form || !submitButton) {
-        console.error('Le formulaire de collaboration ou le bouton de soumission est manquant');
-        return;
-    }
+//     if (!form || !submitButton) {
+//         console.error('Le formulaire de collaboration ou le bouton de soumission est manquant');
+//         return;
+//     }
 
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
-    }
+//     function getValueById(id) {
+//         const element = document.getElementById(id);
+//         return element ? element.value : '';
+//     }
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+//     form.addEventListener('submit', function(e) {
+//         e.preventDefault();
 
-        const memoContent = [
-            `Société : ${getValueById('collab_societe')}`,
-            `Message : ${getValueById('collab_message')}`
-        ].join('\n');
+//         const memoContent = [
+//             `Société : ${getValueById('collab_societe')}`,
+//             `Message : ${getValueById('collab_message')}`
+//         ].join('\n');
 
-        const data = {
-            action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
-            lg: 'FR',
-            civilite: getValueById('collab_civilite'),
-            nom: getValueById('collab_nom'),
-            prenom: getValueById('collab_prenom'),
-            email: getValueById('collab_email'),
-            telephone: getValueById('collab_telephone'),
-            societe: getValueById('collab_societe'),
-            memo: memoContent,
-            remarque: memoContent,
-            objet_commande: 'Demande de collaboration'
-        };
+//         const data = {
+//             action: 'contact',
+//             login: import.meta.env.VITE_CONTACT_LOGIN,
+//             pass: import.meta.env.VITE_CONTACT_PASSWORD,
+//             lg: 'FR',
+//             civilite: getValueById('collab_civilite'),
+//             nom: getValueById('collab_nom'),
+//             prenom: getValueById('collab_prenom'),
+//             email: getValueById('collab_email'),
+//             telephone: getValueById('collab_telephone'),
+//             societe: getValueById('collab_societe'),
+//             memo: memoContent,
+//             remarque: memoContent,
+//             objet_commande: 'Demande de collaboration'
+//         };
 
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.erreur === 0) {
-                form.reset();
-            } else {
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    });
-});
+//         fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/x-www-form-urlencoded',
+//                 'Accept-Charset': 'UTF-8'
+//             },
+//             body: new URLSearchParams(data)
+//         })
+//         .then(response => response.json())
+//         .then(result => {
+//             if (result.erreur === 0) {
+//                 form.reset();
+//             } else {
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Erreur:', error);
+//         });
+//     });
+// });
 
 
-//////////////////////EVENEMENT FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('privatisationForm');
-    const submitButton = document.getElementById('privatisationSubmit');
+// //////////////////////EVENEMENT FORM//////////////////////
+// document.addEventListener('DOMContentLoaded', function() {
+//     const form = document.getElementById('privatisationForm');
+//     const submitButton = document.getElementById('privatisationSubmit');
 
-    if (!form || !submitButton) {
-        console.error('Le formulaire ou le bouton de soumission est manquant');
-        return;
-    }
+//     if (!form || !submitButton) {
+//         console.error('Le formulaire ou le bouton de soumission est manquant');
+//         return;
+//     }
 
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
-    }
+//     function getValueById(id) {
+//         const element = document.getElementById(id);
+//         return element ? element.value : '';
+//     }
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+//     form.addEventListener('submit', function(e) {
+//         e.preventDefault();
 
-        const memoContent = [
-            `Date de l'évènement : ${getValueById('date_evenement')}`,
-            `Type d'évènement : ${getValueById('type_evenement')}`,
-            `Budget : ${getValueById('budget')}`,
-            `Nombre d'invités : ${getValueById('nombre_invites')}`,
-            `Message : ${getValueById('message')}`
-        ].join('\n');
+//         const memoContent = [
+//             `Date de l'évènement : ${getValueById('date_evenement')}`,
+//             `Type d'évènement : ${getValueById('type_evenement')}`,
+//             `Budget : ${getValueById('budget')}`,
+//             `Nombre d'invités : ${getValueById('nombre_invites')}`,
+//             `Message : ${getValueById('message')}`
+//         ].join('\n');
 
-        const data = {
-            action: 'contact',
-            login: import.meta.env.VITE_CONTACT_LOGIN,
-            pass: import.meta.env.VITE_CONTACT_PASSWORD,
-            lg: 'FR',
-            civilite: getValueById('civilite'),
-            nom: getValueById('nom'),
-            prenom: getValueById('prenom'),
-            email: getValueById('email'),
-            telephone: getValueById('telephone'),
-            objet_commande: getValueById('type_evenement'),
-            memo: memoContent,
-            remarque: memoContent,
-            mobile: getValueById('telephone'),
-        };
+//         const data = {
+//             action: 'contact',
+//             login: import.meta.env.VITE_CONTACT_LOGIN,
+//             pass: import.meta.env.VITE_CONTACT_PASSWORD,
+//             lg: 'FR',
+//             civilite: getValueById('civilite'),
+//             nom: getValueById('nom'),
+//             prenom: getValueById('prenom'),
+//             email: getValueById('email'),
+//             telephone: getValueById('telephone'),
+//             objet_commande: getValueById('type_evenement'),
+//             memo: memoContent,
+//             remarque: memoContent,
+//             mobile: getValueById('telephone'),
+//         };
 
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.erreur === 0) {
-                form.reset();
-            } else {
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    });
-});
+//         fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/x-www-form-urlencoded',
+//                 'Accept-Charset': 'UTF-8'
+//             },
+//             body: new URLSearchParams(data)
+//         })
+//         .then(response => response.json())
+//         .then(result => {
+//             if (result.erreur === 0) {
+//                 form.reset();
+//             } else {
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Erreur:', error);
+//         });
+//     });
+// });
