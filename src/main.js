@@ -61,7 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getEnvVariable(key) {
-    return import.meta.env[key] || process.env[key] || '';
+    if (typeof import.meta.env !== 'undefined') {
+        return import.meta.env[key] || '';
+    }
+    return '';
 }
 
 //////////////////////COLLAB FORM//////////////////////
