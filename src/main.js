@@ -19,10 +19,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
     const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
+    console.log('Page chargée, vérification des variables d\'environnement');
+    console.log('VITE_CONTACT_LOGIN est défini :', !!contactLogin);
+    console.log('VITE_CONTACT_PASSWORD est défini :', !!contactPassword);
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        console.log('Formulaire soumis');
+        console.log('Variables d\'environnement :', {
+            login: contactLogin,
+            password: contactPassword ? '✓ défini' : '✗ non défini'
+        });
 
         const memoContent = `Message : ${getValueById('contact_message')}`;
+        console.log('Contenu du message :', memoContent);
 
         const data = {
             action: 'contact',
@@ -38,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
             remarque: memoContent,
             objet_commande: 'Demande de contact'
         };
+        
+        console.log('Données envoyées :', data);
 
         fetch('https://www.beenbiz.com/o-chateau/webservice-internet/ws.php', {
             method: 'POST',
@@ -47,15 +59,22 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: new URLSearchParams(data)
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Réponse brute reçue :', response);
+            return response.json();
+        })
         .then(result => {
+            console.log('Résultat JSON :', result);
             if (result.erreur === 0) {
+                console.log('Succès : formulaire envoyé');
                 form.reset();
             } else {
+                console.error('Erreur API :', result.message_erreur);
             }
         })
         .catch(error => {
-            console.error('Erreur:', error);
+            console.error('Erreur détaillée :', error);
+            console.error('Stack trace :', error.stack);
         });
     });
 });
