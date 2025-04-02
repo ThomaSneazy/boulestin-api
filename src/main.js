@@ -28,23 +28,14 @@ const FORMS_CONFIG = {
         formId: 'privatisationForm',
         submitId: 'privatisationSubmit',
         prefix: '',
-        objectCommande: null,
+        objectCommande: null, // Utilise type_evenement du formulaire
         memoFields: ['date_evenement', 'type_evenement', 'budget', 'nombre_invites', 'message']
     }
 };
 
 // Utilitaires
-function getEnvVariable(key) {
-    if (typeof import.meta.env !== 'undefined') {
-        return import.meta.env[key] || '';
-    }
-    return '';
-}
-
-function getValueById(id) {
-    const element = document.getElementById(id);
-    return element ? element.value : '';
-}
+const getEnvVariable = (key) => import.meta.env[key] || process.env[key] || '';
+const getValueById = (id) => document.getElementById(id)?.value || '';
 
 // Gestionnaire de formulaire générique
 class FormHandler {
@@ -56,7 +47,7 @@ class FormHandler {
         this.contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
         if (!this.form || !this.submitButton) {
-            console.error('Le formulaire ' + config.formId + ' ou son bouton est manquant');
+            console.error(`Le formulaire ${config.formId} ou son bouton est manquant`);
             return;
         }
 
@@ -65,17 +56,18 @@ class FormHandler {
 
     getMemoContent() {
         return this.config.memoFields
-            .map(function(field) {
+            .map(field => {
                 const label = field.charAt(0).toUpperCase() + field.slice(1);
-                return label + ' : ' + getValueById(this.config.prefix + field);
-            }.bind(this))
+                return `${label} : ${getValueById(this.config.prefix + field)}`;
+            })
             .join('\n');
     }
 
     getFormData() {
         const memoContent = this.getMemoContent();
         const prefix = this.config.prefix;
-        const data = {
+
+        return {
             action: 'contact',
             login: this.contactLogin,
             pass: this.contactPassword,
@@ -87,55 +79,42 @@ class FormHandler {
             telephone: getValueById(prefix + 'telephone'),
             memo: memoContent,
             remarque: memoContent,
-            objet_commande: this.config.objectCommande || getValueById('type_evenement')
+            objet_commande: this.config.objectCommande || getValueById('type_evenement'),
+            ...(prefix === 'collab_' && { societe: getValueById('collab_societe') }),
+            ...(prefix === '' && { mobile: getValueById('telephone') })
         };
-
-        if (prefix === 'collab_') {
-            data.societe = getValueById('collab_societe');
-        }
-        if (prefix === '') {
-            data.mobile = getValueById('telephone');
-        }
-
-        return data;
     }
 
-    submitForm(e) {
+    async submitForm(e) {
         e.preventDefault();
-        const self = this;
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept-Charset': 'UTF-8'
+                },
+                body: new URLSearchParams(this.getFormData())
+            });
 
-        fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(this.getFormData())
-        })
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(result) {
+            const result = await response.json();
             if (result.erreur === 0) {
-                self.form.reset();
-                console.log('Formulaire ' + self.config.formId + ' soumis avec succès, ID: ' + result.id_contact);
+                this.form.reset();
+                console.log(`Formulaire ${this.config.formId} soumis avec succès, ID: ${result.id_contact}`);
             } else {
                 console.error('Erreur:', result.message_erreur);
             }
-        })
-        .catch(function(error) {
+        } catch (error) {
             console.error('Erreur:', error);
-        });
+        }
     }
 
     initializeForm() {
-        this.form.addEventListener('submit', this.submitForm.bind(this));
+        this.form.addEventListener('submit', (e) => this.submitForm(e));
     }
 }
 
 // Initialisation des formulaires
-document.addEventListener('DOMContentLoaded', function() {
-    Object.keys(FORMS_CONFIG).forEach(function(key) {
-        new FormHandler(FORMS_CONFIG[key]);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    Object.values(FORMS_CONFIG).forEach(config => new FormHandler(config));
 });
