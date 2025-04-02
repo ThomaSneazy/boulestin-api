@@ -1,11 +1,6 @@
 import './styles/style.css'
 
-// Fonction pour récupérer les variables d'environnement
-function getEnvVariable(key) {
-    return import.meta.env[key] || '';
-}
-
-//////////////////////CONTACT FORM/////////////////////
+//////////////////////CONTACT FORM//////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     const submitButton = document.getElementById('contactSubmit');
@@ -20,8 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = import.meta.env.VITE_CONTACT_LOGIN;
-    const contactPassword = import.meta.env.VITE_CONTACT_PASSWORD;
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -64,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function getEnvVariable(key) {
+    return import.meta.env[key] || process.env[key] || '';
+}
+
 //////////////////////COLLAB FORM//////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('collabForm');
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
     const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
     const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
@@ -142,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
     const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
     const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
@@ -201,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
+    // Utilisez cette fonction pour accéder à vos variables d'environnement
     const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
     const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
@@ -251,3 +254,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function _(key) {
+    if (typeof import.meta.env !== 'undefined') {
+        return import.meta.env[key] || '';
+    }
+    if (typeof process !== 'undefined' && process.env) {
+        return process.env[key] || '';
+    }
+    // Si aucune variable d'environnement n'est trouvée, retournez une chaîne vide
+    console.error(`La variable d'environnement ${key} n'est pas définie`);
+    return '';
+}
