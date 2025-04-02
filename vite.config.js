@@ -35,5 +35,9 @@ export default defineConfig(({ mode }) => {
         external: ['jquery'],
       },
     },
+    define: {
+      'import.meta.env.VITE_CONTACT_LOGIN': JSON.stringify(env.VITE_CONTACT_LOGIN || ''),
+      'import.meta.env.VITE_CONTACT_PASSWORD': JSON.stringify(env.VITE_CONTACT_PASSWORD || '')
+    }
   }
 })
