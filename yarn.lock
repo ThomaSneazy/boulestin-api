@@ -28,10 +28,10 @@ concat-map@0.0.1:
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-dotenv@^16.4.5:
-  version "16.4.5"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.4.5.tgz"
-  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
+dotenv@^16.4.7:
+  version "16.4.7"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.4.7.tgz"
+  integrity sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==
 
 esbuild-darwin-arm64@0.14.54:
   version "0.14.54"
