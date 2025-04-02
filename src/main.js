@@ -5,7 +5,7 @@ function getEnvVariable(key) {
     return import.meta.env[key] || '';
 }
 
-//////////////////////CONTACT FORM//////////////////////
+//////////////////////CONTACT FORM/////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     const submitButton = document.getElementById('contactSubmit');
