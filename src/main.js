@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+    const contactLogin = import.meta.env.VITE_CONTACT_LOGIN;
+    const contactPassword = import.meta.env.VITE_CONTACT_PASSWORD;
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
