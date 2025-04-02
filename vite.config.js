@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
         input: './src/main.js',
         output: {
           format: 'umd',
-          entryFileNames: '[name].[hash].js',
+          entryFileNames: 'main.js',
           esModule: false,
           compact: true,
           globals: {
