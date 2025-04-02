@@ -1,268 +1,120 @@
 import './styles/style.css'
 
-//////////////////////CONTACT FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('contactForm');
-    const submitButton = document.getElementById('contactSubmit');
+// Configuration commune
+const API_URL = 'https://www.beenbiz.com/o-chateau/webservice-internet/ws.php';
+const FORMS_CONFIG = {
+    contact: {
+        formId: 'contactForm',
+        submitId: 'contactSubmit',
+        prefix: 'contact_',
+        objectCommande: 'Demande de contact',
+        memoFields: ['message']
+    },
+    collab: {
+        formId: 'collabForm',
+        submitId: 'collabSubmit',
+        prefix: 'collab_',
+        objectCommande: 'Demande de collaboration',
+        memoFields: ['societe', 'message']
+    },
+    sav: {
+        formId: 'savForm',
+        submitId: 'savSubmit',
+        prefix: 'sav_',
+        objectCommande: 'Demande SAV',
+        memoFields: ['message']
+    },
+    privatisation: {
+        formId: 'privatisationForm',
+        submitId: 'privatisationSubmit',
+        prefix: '',
+        objectCommande: null, // Utilise type_evenement du formulaire
+        memoFields: ['date_evenement', 'type_evenement', 'budget', 'nombre_invites', 'message']
+    }
+};
 
-    if (!form || !submitButton) {
-        console.error('Le formulaire de contact ou le bouton de soumission est manquant');
-        return;
+// Utilitaires
+const getEnvVariable = (key) => import.meta.env[key] || process.env[key] || '';
+const getValueById = (id) => document.getElementById(id)?.value || '';
+
+// Gestionnaire de formulaire générique
+class FormHandler {
+    constructor(config) {
+        this.config = config;
+        this.form = document.getElementById(config.formId);
+        this.submitButton = document.getElementById(config.submitId);
+        this.contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+        this.contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+
+        if (!this.form || !this.submitButton) {
+            console.error(`Le formulaire ${config.formId} ou son bouton est manquant`);
+            return;
+        }
+
+        this.initializeForm();
     }
 
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
+    getMemoContent() {
+        return this.config.memoFields
+            .map(field => {
+                const label = field.charAt(0).toUpperCase() + field.slice(1);
+                return `${label} : ${getValueById(this.config.prefix + field)}`;
+            })
+            .join('\n');
     }
 
-    // Utilisez cette fonction pour accéder à vos variables d'environnement
-    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
+    getFormData() {
+        const memoContent = this.getMemoContent();
+        const prefix = this.config.prefix;
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const memoContent = `Message : ${getValueById('contact_message')}`;
-
-        const data = {
+        return {
             action: 'contact',
-            login: contactLogin,
-            pass: contactPassword,
+            login: this.contactLogin,
+            pass: this.contactPassword,
             lg: 'FR',
-            civilite: getValueById('contact_civilite'),
-            nom: getValueById('contact_nom'),
-            prenom: getValueById('contact_prenom'),
-            email: getValueById('contact_email'),
-            telephone: getValueById('contact_telephone'),
+            civilite: getValueById(prefix + 'civilite'),
+            nom: getValueById(prefix + 'nom'),
+            prenom: getValueById(prefix + 'prenom'),
+            email: getValueById(prefix + 'email'),
+            telephone: getValueById(prefix + 'telephone'),
             memo: memoContent,
             remarque: memoContent,
-            objet_commande: 'Demande de contact'
+            objet_commande: this.config.objectCommande || getValueById('type_evenement'),
+            ...(prefix === 'collab_' && { societe: getValueById('collab_societe') }),
+            ...(prefix === '' && { mobile: getValueById('telephone') })
         };
+    }
 
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
+    async submitForm(e) {
+        e.preventDefault();
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept-Charset': 'UTF-8'
+                },
+                body: new URLSearchParams(this.getFormData())
+            });
+
+            const result = await response.json();
             if (result.erreur === 0) {
-                form.reset();
+                this.form.reset();
+                console.log(`Formulaire ${this.config.formId} soumis avec succès, ID: ${result.id_contact}`);
             } else {
+                console.error('Erreur:', result.message_erreur);
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Erreur:', error);
-        });
-    });
-});
+        }
+    }
 
-function getEnvVariable(key) {
-    return import.meta.env[key] || process.env[key] || '';
+    initializeForm() {
+        this.form.addEventListener('submit', (e) => this.submitForm(e));
+    }
 }
 
-//////////////////////COLLAB FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('collabForm');
-    const submitButton = document.getElementById('collabSubmit');
-
-    if (!form || !submitButton) {
-        console.error('Le formulaire de collaboration ou le bouton de soumission est manquant');
-        return;
-    }
-
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
-    }
-
-    // Utilisez cette fonction pour accéder à vos variables d'environnement
-    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const memoContent = [
-            `Société : ${getValueById('collab_societe')}`,
-            `Message : ${getValueById('collab_message')}`
-        ].join('\n');
-
-        const data = {
-            action: 'contact',
-            login: contactLogin,
-            pass: contactPassword,
-            lg: 'FR',
-            civilite: getValueById('collab_civilite'),
-            nom: getValueById('collab_nom'),
-            prenom: getValueById('collab_prenom'),
-            email: getValueById('collab_email'),
-            telephone: getValueById('collab_telephone'),
-            societe: getValueById('collab_societe'),
-            memo: memoContent,
-            remarque: memoContent,
-            objet_commande: 'Demande de collaboration'
-        };
-
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.erreur === 0) {
-                form.reset();
-            } else {
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    });
+// Initialisation des formulaires
+document.addEventListener('DOMContentLoaded', () => {
+    Object.values(FORMS_CONFIG).forEach(config => new FormHandler(config));
 });
-
-//////////////////////SAV FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('savForm');
-    const submitButton = document.getElementById('savSubmit');
-
-    if (!form || !submitButton) {
-        console.error('Le formulaire SAV ou le bouton de soumission est manquant');
-        return;
-    }
-
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
-    }
-
-    // Utilisez cette fonction pour accéder à vos variables d'environnement
-    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const memoContent = `Message : ${getValueById('sav_message')}`;
-
-        const data = {
-            action: 'contact',
-            login: contactLogin,
-            pass: contactPassword,
-            lg: 'FR',
-            civilite: getValueById('sav_civilite'),
-            nom: getValueById('sav_nom'),
-            prenom: getValueById('sav_prenom'),
-            email: getValueById('sav_email'),
-            telephone: getValueById('sav_telephone'),
-            memo: memoContent,
-            remarque: memoContent,
-            objet_commande: 'Demande SAV'
-        };
-
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.erreur === 0) {
-                form.reset();
-            } else {
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    });
-});
-
-//////////////////////PRIVATISATION FORM//////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('privatisationForm');
-    const submitButton = document.getElementById('privatisationSubmit');
-
-    if (!form || !submitButton) {
-        console.error('Le formulaire ou le bouton de soumission est manquant');
-        return;
-    }
-
-    function getValueById(id) {
-        const element = document.getElementById(id);
-        return element ? element.value : '';
-    }
-
-    // Utilisez cette fonction pour accéder à vos variables d'environnement
-    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const memoContent = [
-            `Date de l'évènement : ${getValueById('date_evenement')}`,
-            `Type d'évènement : ${getValueById('type_evenement')}`,
-            `Budget : ${getValueById('budget')}`,
-            `Nombre d'invités : ${getValueById('nombre_invites')}`,
-            `Message : ${getValueById('message')}`
-        ].join('\n');
-
-        const data = {
-            action: 'contact',
-            login: contactLogin,
-            pass: contactPassword,
-            lg: 'FR',
-            civilite: getValueById('civilite'),
-            nom: getValueById('nom'),
-            prenom: getValueById('prenom'),
-            email: getValueById('email'),
-            telephone: getValueById('telephone'),
-            objet_commande: getValueById('type_evenement'),
-            memo: memoContent,
-            remarque: memoContent,
-            mobile: getValueById('telephone'),
-        };
-
-        fetch('https://www.tourbiz-gestion.com/user/das75/webservice-internet/ws.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept-Charset': 'UTF-8'
-            },
-            body: new URLSearchParams(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.erreur === 0) {
-                form.reset();
-            } else {
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    });
-});
-
-function _(key) {
-    if (typeof import.meta.env !== 'undefined') {
-        return import.meta.env[key] || '';
-    }
-    if (typeof process !== 'undefined' && process.env) {
-        return process.env[key] || '';
-    }
-    // Si aucune variable d'environnement n'est trouvée, retournez une chaîne vide
-    console.error(`La variable d'environnement ${key} n'est pas définie`);
-    return '';
-}
