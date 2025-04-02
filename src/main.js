@@ -2,7 +2,7 @@ import './styles/style.css'
 
 // Fonction pour récupérer les variables d'environnement
 function getEnvVariable(key) {
-    return process.env[key] || '';
+    return import.meta.env[key] || '';
 }
 
 //////////////////////CONTACT FORM//////////////////////
@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = getEnvVariable('CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('CONTACT_PASSWORD');
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = getEnvVariable('CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('CONTACT_PASSWORD');
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -142,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = getEnvVariable('CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('CONTACT_PASSWORD');
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -201,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return element ? element.value : '';
     }
 
-    const contactLogin = getEnvVariable('CONTACT_LOGIN');
-    const contactPassword = getEnvVariable('CONTACT_PASSWORD');
+    const contactLogin = getEnvVariable('VITE_CONTACT_LOGIN');
+    const contactPassword = getEnvVariable('VITE_CONTACT_PASSWORD');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
